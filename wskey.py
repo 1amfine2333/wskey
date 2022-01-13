@@ -331,30 +331,30 @@ def serch_ck(pin):
     elif len(res['data']) > 1:
         logger.info(str(pin) + "存在重复, 取第一条, 请删除多余变量\n")
         key = res['data'][0]['value']
-        eid = res['data'][0]['_id']
+        eid = res['data'][0]['id']
         return True, key, eid
     else:
         logger.info(str(pin) + "检索成功\n")
         key = res['data'][0]['value']
-        eid = res['data'][0]['_id']
+        eid = res['data'][0]['id']
         return True, key, eid
 
 
-def ql_update(e_id, n_ck):
+def ql_update(eid, n_ck):
     url = 'http://127.0.0.1:{0}/api/envs'.format(port)
     data = {
         "name": "JD_COOKIE",
         "value": n_ck,
-        "_id": e_id
+        "id": eid
     }
     data = json.dumps(data)
     res = json.loads(s.put(url=url, data=data).text)
     ql_enable(eid)
 
 
-def ql_enable(e_id):
+def ql_enable(eid):
     url = 'http://127.0.0.1:{0}/api/envs/enable'.format(port)
-    data = '["{0}"]'.format(e_id)
+    data = '["{0}"]'.format(eid)
     res = json.loads(s.put(url=url, data=data).text)
     if res['code'] == 200:
         logger.info("\n账号启用\n--------------------\n")
@@ -364,9 +364,9 @@ def ql_enable(e_id):
         return False
 
 
-def ql_disable(e_id):
+def ql_disable(eid):
     url = 'http://127.0.0.1:{0}/api/envs/disable'.format(port)
-    data = '["{0}"]'.format(e_id)
+    data = '["{0}"]'.format(eid)
     res = json.loads(s.put(url=url, data=data).text)
     if res['code'] == 200:
         logger.info("\n账号禁用成功\n--------------------\n")
